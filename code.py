@@ -7,12 +7,14 @@ import os
 import sys
 from datetime import datetime
 import time
+import serial
 
 
 from pika.connection import Connection
 
 os.system('sudo chmod 666 /dev/hidraw0')
 os.system('sudo chmod 666 /dev/hidraw1')
+os.system
 
 # connection = pika.BlockingConnection(
 #     pika.ConnectionParameters(host='localhost'))
