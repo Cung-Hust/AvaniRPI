@@ -2,6 +2,8 @@
  
 import time
 import serial
+import threading
+
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -21,18 +23,22 @@ ser = serial.Serial(
 	parity = serial.PARITY_NONE,
 	stopbits = serial.STOPBITS_ONE,
 	bytesize = serial.EIGHTBITS,
-	timeout = 0
+	timeout = 0.1
 )
  
 print("Raspberry's receiving : ")
- 
-try:
+
+def device():
     while True:
         s = ser.readline()
         data = s.decode()			# decode s
         data = data.rstrip()			# cut "\r\n" at last of string
         if(data):
             print(data)				# print string
+try:
+    t0 = threading.Thread(target=device, args=())
+    t0.start()
+    t0.join()
  
 except KeyboardInterrupt:
 	ser.close()

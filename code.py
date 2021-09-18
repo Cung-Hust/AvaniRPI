@@ -7,31 +7,24 @@ import os
 import sys
 from datetime import datetime
 import time
-import serial
 
 
 from pika.connection import Connection
 
 os.system('sudo chmod 666 /dev/hidraw0')
 os.system('sudo chmod 666 /dev/hidraw1')
-os.system
-
-# connection = pika.BlockingConnection(
-#     pika.ConnectionParameters(host='localhost'))
+# #################################
+# connect rabbitMQ
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
-        '192.168.1.12', 5672,
-        '/',
+        '192.168.0.104', 5672, 
+        '/', 
         pika.PlainCredentials('avani', 'avani'),
         blocked_connection_timeout=1000,
         heartbeat=0,))
 channel = connection.channel()
-
-# channel.queue_declare(queue='rfid')
-# channel.queue_declare(queue='barcode')
-
-channel.queue_declare(queue='kangaroo')
+channel.queue_declare(queue='test')
 
 # ============== - RFID - ==============
 
@@ -51,7 +44,7 @@ def rfid_read(fp):
         rf_msg = json.dumps(rfid_mess)
 
         channel.basic_publish(
-            exchange='', routing_key='kangaroo', body=rf_msg)
+            exchange='', routing_key='test', body=rf_msg)
         print(rfid_mess)
 
 # ============== - BARCODE - ==============
@@ -79,9 +72,8 @@ def scanner(fp):
         ba_msg = json.dumps(bar_mess)
 
         channel.basic_publish(
-            exchange='', routing_key='kangaroo', body=ba_msg)
+            exchange='', routing_key='test', body=ba_msg)
         print(bar_mess)
-
 
 try:
     f0 = open('/dev/hidraw0', 'rb')

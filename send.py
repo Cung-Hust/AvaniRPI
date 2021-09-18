@@ -2,6 +2,7 @@
  
 import time
 import serial
+import _thread
  
 ser = serial.Serial(
 	port = '/dev/ttyS0',
